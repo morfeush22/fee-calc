@@ -1,0 +1,14 @@
+bin/
+include/
+lib/
+lib64
+.eggs/
+.idea/
+dist/
+*.json
+*.cfg
+*egg-info/
+*.db
+__pycache__/
+client.ini
+
