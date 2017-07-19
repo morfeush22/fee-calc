@@ -62,7 +62,7 @@ def reduce_others(rep, max_payee):
         rep[max_payee][payee] -= balance
 
 
-def reduce(rep):
+def reduce_report(rep):
     reduced = dict(rep)
     max_payee = find_max_payee(reduced)
     reduce_self(reduced, max_payee)
@@ -75,7 +75,7 @@ def main():
     rep = generate_report(args.FEE_FILE)
     print("REPORT")
     print_report(rep)
-    reduced = reduce(rep)
+    reduced = reduce_report(rep)
     print("\nREDUCED REPORT")
     print_report(reduced)
 
