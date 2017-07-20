@@ -1,6 +1,6 @@
 def application_factory():
     from flask import Flask
-    return Flask(__name__.split('.')[0], static_url_path='/static')
+    return Flask(__name__.split('.')[0])
 
 
 def register_blueprints(app, blueprints):
