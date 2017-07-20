@@ -14,6 +14,7 @@ def setup_app(app, app_config):
     @app.before_request
     def setup():
         g.users = app_config['users']
+        g.fee_file = app_config['fee_file']
 
 
 def wsgi(global_config, **local_config):
