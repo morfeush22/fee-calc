@@ -14,6 +14,14 @@ def parse_line(line):
     return line.strip().split(',')
 
 
+def generate_list(fee_file):
+    lst = []
+    with open(fee_file, 'r') as file:
+        for line in file:
+            lst.append(parse_line(line))
+    return lst
+
+
 def generate_report(fee_file):
     rep = defaultdict(lambda: defaultdict(lambda: 0))
     with open(fee_file, 'r') as file:
