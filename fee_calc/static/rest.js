@@ -1,9 +1,58 @@
+class List extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      list: []
+    };
+  }
+
+  componentDidMount() {
+    axios.get("/api/list")
+      .then(res => {
+        const fees = res.data;
+        this.setState({list: fees});
+        console.log(fees);
+      });
+  }
+
+  render() {
+    var rows = [];
+    for (let i = 0; i < this.state.list.length; ++i) {
+        let [payee, acceptor, fee] = this.state.list[i]
+        rows.push(
+            <tr key={payee + acceptor + i}>
+                <td>{payee}</td>
+                <td>{acceptor}</td>
+                <td>{fee}</td>
+            </tr>
+        );
+    }
+    return (
+      <div>
+        <table className="table table-bordered">
+            <thead>
+                <tr>
+                <th>Payee</th>
+                <th>Acceptor</th>
+                <th>Fee</th>
+                </tr>
+            </thead>
+            <tbody>
+                {rows}
+            </tbody>
+        </table>
+      </div>
+    );
+  }
+}
+
 class Report extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      posts: []
+      report: []
     };
   }
 
@@ -92,6 +141,11 @@ class SummarizedReport extends React.Component {
 }
 
 ReactDOM.render(
+  <List />,
+  document.getElementById('list')
+);
+
+ReactDOM.render(
   <Report />,
   document.getElementById('report')
 );
@@ -100,3 +154,17 @@ ReactDOM.render(
   <SummarizedReport />,
   document.getElementById('summarized_report')
 );
+
+$(document).ready( () => {
+  $('form#form').submit( e => false );
+  $('form#form :submit').click( () => {
+    axios.post("api/send_fee", $('form#form').serialize())
+    .then( resp => {
+        $('form#form').trigger("reset");
+        window.location.reload();
+    })
+    .catch( err => {
+        console.log(err);
+    })
+  });
+});
