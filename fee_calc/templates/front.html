@@ -40,11 +40,62 @@
 
         <div class="col-md-6">
             <h1>List</h1>
-            <div id="list"></div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Payee</th>
+                            <th>Acceptor</th>
+                            <th>Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in list %}
+                      <tr>
+                        <td>{{ item[0] }}</td>
+                        <td>{{ item[1] }}</td>
+                        <td>{{ item[2] | float }}</td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             <h1>Report</h1>
-            <div id="report"></div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Payee</th>
+                            <th>Acceptor</th>
+                            <th>Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for payee in report %}
+                        {% for acceptor in report[payee] %}
+                          <tr>
+                            <td>{{ payee }}</td>
+                            <td>{{ acceptor }}</td>
+                            <td>{{ report[payee][acceptor] | float }}</td>
+                          </tr>
+                        {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                </table>
             <h1>Summarized report</h1>
-            <div id="summarized_report"></div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Acceptor</th>
+                            <th>Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in summarized_report %}
+                      <tr>
+                        <td>{{ item }}</td>
+                        <td>{{ summarized_report[item] | float }}</td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
         </div>
       </div>
       <div class="row">

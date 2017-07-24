@@ -1,6 +1,7 @@
 from collections import defaultdict
 from itertools import permutations
 import argparse
+import copy
 
 parser = argparse.ArgumentParser()
 parser.add_argument('FEE_FILE', type=str)
@@ -57,7 +58,7 @@ def reduce_others(rep, max_payee):
 
 
 def reduce_report(rep):
-    reduced = dict(rep)
+    reduced = copy.deepcopy(rep)
     max_payee = find_max_payee(reduced)
     reduce_self(reduced, max_payee)
     reduce_others(reduced, max_payee)
