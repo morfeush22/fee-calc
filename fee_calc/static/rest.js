@@ -154,17 +154,3 @@ ReactDOM.render(
   <SummarizedReport />,
   document.getElementById('summarized_report')
 );
-
-$(document).ready( () => {
-  $('form#form').submit( e => false );
-  $('form#form :submit').click( () => {
-    axios.post("api/send_fee", $('form#form').serialize())
-    .then( resp => {
-        $('form#form').trigger("reset");
-        window.location.reload();
-    })
-    .catch( err => {
-        console.log(err);
-    })
-  });
-});

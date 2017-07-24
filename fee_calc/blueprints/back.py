@@ -1,5 +1,5 @@
 from fee_calc.reducer import generate_list, generate_report, reduce_report
-from flask import Blueprint, g, jsonify, request
+from flask import Blueprint, g, jsonify, redirect, request, url_for
 
 
 blueprint = Blueprint('back', __name__.split('.')[0])
@@ -25,11 +25,11 @@ def summarized_report():
     return jsonify(reduce_report(generate_report(g.fee_file)))
 
 
-@blueprint.route('/api/send_fee', methods=['POST'])
+@blueprint.route('/api/send_fee', methods=['GET'])
 def send_fee():
-    payee = request.form['payee']
-    acceptor = request.form['acceptor']
-    fee = request.form['fee']
+    payee = request.args.get('payee')
+    acceptor = request.args.get('acceptor')
+    fee = request.args.get('fee')
     with open(g.fee_file, "a") as file:
         file.write(','.join([payee, acceptor, fee]) + '\n')
-    return '', 204
+    return redirect(url_for('front.front'))
