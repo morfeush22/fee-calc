@@ -38,5 +38,7 @@ def send_fee():
     acceptor = request.args.get('acceptor')
     balance = float(request.args.get('balance'))
     with db.engine.transaction() as c:
+        if not hasattr(c.root, 'fees'):
+            c.root.fees = []
         c.root.fees.append(Fee(payee, acceptor, balance))
     return redirect(url_for('front.front'))
