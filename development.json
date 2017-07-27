@@ -1,1 +1,1 @@
-{"app": {"root_user": "k", "users": ["a", "k", "m"]}, "flask": {"DEBUG": true}, "zodb": {"db_path": "./fees.fs"}}
+{"app": {"root_user": "Kacper", "users": ["Andrzej", "Kacper", "Monika"]}, "flask": {"DEBUG": true}, "zodb": {"db_path": "./fees.fs"}}

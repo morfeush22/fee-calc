@@ -23,11 +23,21 @@
           <form id="form" action="{{ url_for('back.send_fee') }}">
             <fieldset class="form-group">
             <label for="payee">Payee</label>
-            <input type="text" class="form-control" id="payee" name="payee">
+            <select class="form-control" id="payee" name="payee">
+                <option></option>
+                {% for user in users %}
+                <option>{{ user }}</option>
+                {% endfor %}
+            </select>
             </fieldset>
             <fieldset class="form-group">
             <label for="acceptor">Acceptor</label>
-            <input type="text" class="form-control" id="acceptor" name="acceptor">
+            <select class="form-control" id="acceptor" name="acceptor">
+                <option></option>
+                {% for user in users %}
+                <option>{{ user }}</option>
+                {% endfor %}
+            </select>
             </fieldset>
             <fieldset class="form-group">
             <label for="balance">Balance</label>
@@ -120,6 +130,7 @@
     <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/babel" src="{{ url_for('static', filename='local.js') }}"></script>
     <script type="text/babel" src="{{ url_for('static', filename='rest.js') }}"></script>
   </body>
 </html>

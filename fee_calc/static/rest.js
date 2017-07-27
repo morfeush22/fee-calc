@@ -139,7 +139,7 @@ class SummarizedReport extends React.Component {
     );
   }
 }
-
+/*
 ReactDOM.render(
   <List />,
   document.getElementById('list')
@@ -154,3 +154,4 @@ ReactDOM.render(
   <SummarizedReport />,
   document.getElementById('summarized_report')
 );
+*/
