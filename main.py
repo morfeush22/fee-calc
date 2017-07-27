@@ -1,5 +1,6 @@
 from fee_calc import application, configuration_parser
 from fee_calc.blueprints import back, front
+from fee_calc.database import setup_db
 from flask import g
 
 
@@ -10,16 +11,17 @@ def build_application(config):
     return app_instance
 
 
-def setup_app(app, app_config):
+def setup_app(app, config):
     @app.before_request
     def setup():
-        g.users = app_config['users']
-        g.fee_file = app_config['fee_file']
+        g.root_user = config['root_user']
+        g.users = config['users']
 
 
 def wsgi(global_config, **local_config):
-    config = configuration_parser.parse(local_config)
-    flask_config = config['flask']
-    app = build_application(flask_config)
-    setup_app(app, config)
+    json_config_path = local_config['json']
+    config = configuration_parser.parse(json_config_path)
+    app = build_application(config['flask'])
+    setup_app(app, config['app'])
+    setup_db(config['zodb'])
     return app

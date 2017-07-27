@@ -1,65 +1,46 @@
 from collections import defaultdict
+from fee_calc.database import db
+from flask import g
 from itertools import permutations
-import argparse
-import copy
-
-parser = argparse.ArgumentParser()
-parser.add_argument('FEE_FILE', type=str)
 
 
-def get_args():
-    return parser.parse_args()
+def generate_list():
+    fees = []
+    with db.engine.transaction() as c:
+        for fee in c.root.fees:
+            payee, acceptor, balance, *others = fee.as_list()
+            fees.append([acceptor, payee, balance])
+    return fees
 
 
-def parse_line(line):
-    return line.strip().split(',')
-
-
-def generate_list(fee_file):
-    lst = []
-    with open(fee_file, 'r') as file:
-        for line in file:
-            lst.append(parse_line(line))
-    return lst
-
-
-def generate_report(fee_file):
+def generate_report():
     rep = defaultdict(lambda: defaultdict(lambda: 0))
-    with open(fee_file, 'r') as file:
-        for line in file:
-            acceptor, payee, balance = parse_line(line)
-            rep[payee][acceptor] += float(balance)
+    with db.engine.transaction() as c:
+        for fee in c.root.fees:
+            payee, acceptor, balance, *others = fee.as_list()
+            rep[payee][acceptor] += balance
     return rep
 
 
-def find_max_payee(rep):
-    sum_per_payee = defaultdict(lambda: 0)
-    for payee, acceptors in rep.items():
-        for balance in acceptors.values():
-            sum_per_payee[payee] += balance
-    return max(sum_per_payee, key=lambda i: sum_per_payee[i])
-
-
-def reduce_self(rep, max_payee):
-    for payee in (set(rep.keys()) - set(max_payee)):
+def reduce_self(rep, root_user):
+    for payee in (set(rep.keys()) - set(root_user)):
         for acceptor in rep[payee]:
-            if acceptor == max_payee:
+            if acceptor == root_user:
                 balance = rep[payee][acceptor]
                 rep[acceptor][payee] -= balance
                 rep[payee][acceptor] -= balance
 
 
-def reduce_others(rep, max_payee):
-    for payee, acceptor in permutations(set(rep.keys()) - set(max_payee)):
+def reduce_others(rep, root_user):
+    for payee, acceptor in permutations(set(rep.keys()) - set(root_user)):
         balance = rep[payee][acceptor]
         rep[payee][acceptor] -= balance
-        rep[max_payee][acceptor] += balance
-        rep[max_payee][payee] -= balance
+        rep[root_user][acceptor] += balance
+        rep[root_user][payee] -= balance
 
 
-def reduce_report(rep):
-    reduced = copy.deepcopy(rep)
-    max_payee = find_max_payee(reduced)
-    reduce_self(reduced, max_payee)
-    reduce_others(reduced, max_payee)
-    return reduced[max_payee]
+def generate_reduced_report():
+    rep = generate_report()
+    reduce_self(rep, g.root_user)
+    reduce_others(rep, g.root_user)
+    return rep[g.root_user]

@@ -79,7 +79,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
-            <h1>Summarized report</h1>
+            <h1>Reduced report</h1>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -88,10 +88,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {% for item in summarized_report %}
+                    {% for item in reduced_report %}
                       <tr>
                         <td>{{ item }}</td>
-                        <td>{{ summarized_report[item] | float }}</td>
+                        <td>{{ reduced_report[item] | float }}</td>
                       </tr>
                     {% endfor %}
                     </tbody>
