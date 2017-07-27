@@ -10,7 +10,7 @@ class Fee(persistent.Persistent):
         self.balance = balance
 
     def __str__(self):
-        return "{} => {}: {}".format(self.acceptor, self.payee, self.balance)
+        return "{}\t=> {}: {}".format(self.acceptor, self.payee, self.balance)
 
     def as_list(self):
         return list(self.__dict__.values())
