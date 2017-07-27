@@ -11,4 +11,6 @@ dist/
 *.db
 __pycache__/
 client.ini
+fees.*
+!development.json
 
