@@ -3,6 +3,7 @@
 from fee_calc import configuration_parser
 from fee_calc.database import db, setup_db
 from fee_calc.models import Fee
+from itertools import permutations
 import argparse
 import configparser
 
@@ -20,16 +21,12 @@ def get_json_config_path(config_path):
     return parser['app:main']['json']
 
 
-def populate_db():
+def populate_db(users):
     with db.engine.transaction() as c:
         c.root.fees = []
         fees = c.root.fees
-        fees.append(Fee('a', 'k', 309.33))
-        fees.append(Fee('a', 'm', 127.99))
-        fees.append(Fee('k', 'a', 603.79))
-        fees.append(Fee('k', 'm', 708.22))
-        fees.append(Fee('m', 'a', 59.99))
-        fees.append(Fee('m', 'k', 64.55))
+        for payee, acceptor in permutations(users, 2):
+            fees.append(Fee(payee, acceptor, 100))
 
 
 def print_db():
@@ -43,7 +40,7 @@ def main():
     json_config_path = get_json_config_path(args.CONFIG_FILE)
     json_conf = configuration_parser.parse(json_config_path)
     setup_db(json_conf['zodb'])
-    populate_db()
+    populate_db(json_conf['app']['users'])
     print_db()
 
 

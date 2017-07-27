@@ -7,18 +7,23 @@ from itertools import permutations
 def generate_list():
     fees = []
     with db.engine.transaction() as c:
-        for fee in c.root.fees:
-            payee, acceptor, balance, *others = fee.as_list()
-            fees.append([acceptor, payee, balance])
+        if hasattr(c.root, 'fees'):
+            for fee in c.root.fees:
+                payee, acceptor, balance, *others = fee.as_list()
+                fees.append([acceptor, payee, balance])
     return fees
 
 
 def generate_report():
+    users = g.users
     rep = defaultdict(lambda: defaultdict(lambda: 0))
+    for payee, acceptor in permutations(users, 2):
+        rep[payee][acceptor] = 0
     with db.engine.transaction() as c:
-        for fee in c.root.fees:
-            payee, acceptor, balance, *others = fee.as_list()
-            rep[payee][acceptor] += balance
+        if hasattr(c.root, 'fees'):
+            for fee in c.root.fees:
+                payee, acceptor, balance, *others = fee.as_list()
+                rep[payee][acceptor] += balance
     return rep
 
 
@@ -32,7 +37,7 @@ def reduce_self(rep, root_user):
 
 
 def reduce_others(rep, root_user):
-    for payee, acceptor in permutations(set(rep.keys()) - set(root_user)):
+    for payee, acceptor in permutations(set(rep.keys()) - {root_user}, 2):
         balance = rep[payee][acceptor]
         rep[payee][acceptor] -= balance
         rep[root_user][acceptor] += balance
