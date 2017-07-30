@@ -43,6 +43,10 @@
             <label for="balance">Balance</label>
             <input type="text" class="form-control" id="balance" name="balance">
             </fieldset>
+            <fieldset class="form-group">
+            <label for="balance">Description</label>
+            <textarea class="form-control" rows="5" id="description" name="description"></textarea>
+            </fieldset>
             <button type="submit" class="btn btn-default">Submit</button>
           </form>
         </div>
@@ -50,62 +54,11 @@
 
         <div class="col-md-6">
             <h1>List</h1>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Payee</th>
-                            <th>Acceptor</th>
-                            <th>Fee</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for item in list %}
-                      <tr>
-                        <td>{{ item[0] }}</td>
-                        <td>{{ item[1] }}</td>
-                        <td>{{ item[2] | float }}</td>
-                      </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+            <div id="list"></div>
             <h1>Report</h1>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Payee</th>
-                            <th>Acceptor</th>
-                            <th>Fee</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for payee in report %}
-                        {% for acceptor in report[payee] %}
-                          <tr>
-                            <td>{{ payee }}</td>
-                            <td>{{ acceptor }}</td>
-                            <td>{{ report[payee][acceptor] | float }}</td>
-                          </tr>
-                        {% endfor %}
-                    {% endfor %}
-                    </tbody>
-                </table>
+            <div id="report"></div>
             <h1>Reduced report</h1>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Acceptor</th>
-                            <th>Fee</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for item in reduced_report %}
-                      <tr>
-                        <td>{{ item }}</td>
-                        <td>{{ reduced_report[item] | float }}</td>
-                      </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+            <div id="summarized_report"></div>
         </div>
       </div>
       <div class="row">

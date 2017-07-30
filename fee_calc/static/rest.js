@@ -1,3 +1,57 @@
+class DescriptionBox extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            style: {
+                display: "none"
+            }
+        };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.hidden)
+            this.setState({style: {display: "none"}});
+        else
+            this.setState({style: {display: "block"}});
+    }
+
+    render() {
+        return (
+            <div className="row" style={this.state.style}>
+                <div className="col-md-12">{this.props.description}</div>
+            </div>
+        )
+    }
+}
+
+class Fee extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            expanded: false
+        };
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        this.setState(prevState => ({
+            expanded: !prevState.expanded
+        }));
+    }
+
+    render() {
+        return (
+            <div className="row" onClick={this.handleClick}>
+                <div className="col-md-4">{this.props.payee}</div>
+                <div className="col-md-4">{this.props.acceptor}</div>
+                <div className="col-md-4">{this.props.balance}</div>
+                <DescriptionBox description={this.props.others.description} hidden={!this.state.expanded} />
+            </div>
+        )
+    }
+}
+
 class List extends React.Component {
   constructor(props) {
     super(props);
@@ -12,36 +66,25 @@ class List extends React.Component {
       .then(res => {
         const fees = res.data;
         this.setState({list: fees});
-        console.log(fees);
       });
   }
 
   render() {
     var rows = [];
     for (let i = 0; i < this.state.list.length; ++i) {
-        let [payee, acceptor, fee] = this.state.list[i]
+        let {payee, acceptor, balance, ...others} = this.state.list[i];
         rows.push(
-            <tr key={payee + acceptor + i}>
-                <td>{payee}</td>
-                <td>{acceptor}</td>
-                <td>{fee}</td>
-            </tr>
+            <Fee payee={payee} acceptor={acceptor} balance={balance} others={others} key={"fee-" + i} />
         );
     }
     return (
       <div>
-        <table className="table table-bordered">
-            <thead>
-                <tr>
-                <th>Payee</th>
-                <th>Acceptor</th>
-                <th>Fee</th>
-                </tr>
-            </thead>
-            <tbody>
-                {rows}
-            </tbody>
-        </table>
+        <div className="row">
+            <div className="col-md-4">Payee</div>
+            <div className="col-md-4">Acceptor</div>
+            <div className="col-md-4">Balance</div>
+        </div>
+        {rows}
       </div>
     );
   }
@@ -139,7 +182,7 @@ class SummarizedReport extends React.Component {
     );
   }
 }
-/*
+
 ReactDOM.render(
   <List />,
   document.getElementById('list')
@@ -154,4 +197,3 @@ ReactDOM.render(
   <SummarizedReport />,
   document.getElementById('summarized_report')
 );
-*/

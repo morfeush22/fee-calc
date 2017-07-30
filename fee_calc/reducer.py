@@ -9,8 +9,13 @@ def generate_list():
     with db.engine.transaction() as c:
         if hasattr(c.root, 'fees'):
             for fee in c.root.fees:
-                payee, acceptor, balance, *others = fee.as_list()
-                fees.append([acceptor, payee, balance])
+                d = fee.as_dict()
+                fees.append({
+                    'acceptor': d['acceptor'],
+                    'payee': d['payee'],
+                    'balance': d['balance'],
+                    'description': d['description'] if 'description' in d else ''
+                })
     return fees
 
 
@@ -22,7 +27,7 @@ def generate_report():
     with db.engine.transaction() as c:
         if hasattr(c.root, 'fees'):
             for fee in c.root.fees:
-                payee, acceptor, balance, *others = fee.as_list()
+                payee, acceptor, balance, *others = fee.as_dict().values()
                 rep[payee][acceptor] += balance
     return rep
 
