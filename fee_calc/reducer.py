@@ -13,7 +13,7 @@ def generate_list():
                 'acceptor': d['acceptor'],
                 'payee': d['payee'],
                 'balance': d['balance'],
-                'description': d['description'] if 'description' in d else ''
+                'description': d['description'] if d['description'] else 'No description'
             })
     return fees
 
