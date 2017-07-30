@@ -4,6 +4,7 @@ from fee_calc import configuration_parser
 from fee_calc.database import db, setup_db
 from fee_calc.models import Fee
 from itertools import permutations
+import persistent.list
 import argparse
 import configparser
 
@@ -23,10 +24,10 @@ def get_json_config_path(config_path):
 
 def populate_db(users):
     with db.engine.transaction() as c:
-        c.root.fees = []
+        c.root.fees = persistent.list.PersistentList()
         fees = c.root.fees
         for payee, acceptor in permutations(users, 2):
-            fees.append(Fee(payee, acceptor, 100))
+            fees.append(Fee(payee, acceptor, 100, ''))
 
 
 def print_db():

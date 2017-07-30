@@ -7,15 +7,14 @@ from itertools import permutations
 def generate_list():
     fees = []
     with db.engine.transaction() as c:
-        if hasattr(c.root, 'fees'):
-            for fee in c.root.fees:
-                d = fee.as_dict()
-                fees.append({
-                    'acceptor': d['acceptor'],
-                    'payee': d['payee'],
-                    'balance': d['balance'],
-                    'description': d['description'] if 'description' in d else ''
-                })
+        for fee in c.root.fees:
+            d = fee.as_dict()
+            fees.append({
+                'acceptor': d['acceptor'],
+                'payee': d['payee'],
+                'balance': d['balance'],
+                'description': d['description'] if 'description' in d else ''
+            })
     return fees
 
 
@@ -25,10 +24,9 @@ def generate_report():
     for payee, acceptor in permutations(users, 2):
         rep[payee][acceptor] = 0
     with db.engine.transaction() as c:
-        if hasattr(c.root, 'fees'):
-            for fee in c.root.fees:
-                payee, acceptor, balance, *others = fee.as_dict().values()
-                rep[payee][acceptor] += balance
+        for fee in c.root.fees:
+            payee, acceptor, balance, *others = fee.as_dict().values()
+            rep[payee][acceptor] += balance
     return rep
 
 
