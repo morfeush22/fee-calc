@@ -17,7 +17,7 @@ class DescriptionBox extends React.Component {
 
     render() {
         return (
-            <div className="row" style={this.state.style}>
+            <div className="row description" style={this.state.style}>
                 <div className="col-md-12">{this.props.description}</div>
             </div>
         )
@@ -42,10 +42,12 @@ class Fee extends React.Component {
 
     render() {
         return (
-            <div className="row" onClick={this.handleClick}>
-                <div className="col-md-4">{this.props.payee}</div>
-                <div className="col-md-4">{this.props.acceptor}</div>
-                <div className="col-md-4">{this.props.balance}</div>
+            <div>
+                <div className="row fee" onClick={this.handleClick}>
+                    <div className="col-md-4">{this.props.payee}</div>
+                    <div className="col-md-4">{this.props.acceptor}</div>
+                    <div className="col-md-4">{this.props.balance}</div>
+                </div>
                 <DescriptionBox description={this.props.others.description} hidden={!this.state.expanded} />
             </div>
         )
@@ -79,11 +81,6 @@ class List extends React.Component {
     }
     return (
       <div>
-        <div className="row">
-            <div className="col-md-4">Payee</div>
-            <div className="col-md-4">Acceptor</div>
-            <div className="col-md-4">Balance</div>
-        </div>
         {rows}
       </div>
     );

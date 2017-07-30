@@ -7,7 +7,9 @@
     <!-- Viewport Meta Tag -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
   </head>
   <body>
     <div class="jumbotron jumbotron-fluid">
@@ -55,17 +57,32 @@
         <div class="col-md-6">
             <h1>List</h1>
             <div id="list"></div>
-            <h1>Report</h1>
-            <div id="report"></div>
-            <h1>Reduced report</h1>
-            <div id="summarized_report"></div>
         </div>
       </div>
+
       <div class="row">
-          <div class=".col-md-12">
+          <div class="col-md-12">
             <hr>
           </div>
       </div>
+
+      <div class="row">
+          <div class="col-md-6">
+            <h1>Report</h1>
+            <div id="report"></div>
+          </div>
+
+          <div class="col-md-6">
+            <h1>Reduced report</h1>
+            <div id="summarized_report"></div>
+          </div>
+      </div>
+
+        <footer class="footer">
+          <div class="container">
+            <span class="text-muted">@morfeush22</span>
+          </div>
+        </footer>
     </div>
 
     <!-- JavaScript: placed at the end of the document so the pages load faster -->
